@@ -3,10 +3,11 @@ package ui;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
-import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
 import file.FilePathHolder;
+import file.OpenFileFilter;
+import logic.ConverterHandler;
 
 import javax.swing.JLabel;
 import java.awt.GridLayout;
@@ -17,11 +18,9 @@ import java.awt.Font;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import java.awt.FlowLayout;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
 import javax.swing.JProgressBar;
 import javax.swing.SwingConstants;
+
 import java.awt.Color;
 
 public class MainWindow {
@@ -104,8 +103,9 @@ public class MainWindow {
 		frame.getContentPane().add(convertPanel);
 		convertPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 2, 2));
 		
-		JButton btnNewButton = new JButton("Convert");
-		convertPanel.add(btnNewButton);
+		JButton btnConvert = new JButton("Convert");
+		btnConvert.addActionListener(new ConvertButtonListener());
+		convertPanel.add(btnConvert);
 		
 		JPanel panel = new JPanel();
 		frame.getContentPane().add(panel);
@@ -119,6 +119,9 @@ public class MainWindow {
 		progressBar.setValue(60);
 		progressBar.setBackground(Color.GRAY);
 		panel.add(progressBar);
+		
+		ProgressBarHandler.initialize(progressBar, progressLabel);
+		ConverterHandler.initialize();
 	}
 	
 	public class InputButtonListener implements ActionListener {
@@ -126,6 +129,8 @@ public class MainWindow {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			JFileChooser chooser = new JFileChooser();
+			chooser.removeChoosableFileFilter(chooser.getFileFilter());
+			chooser.addChoosableFileFilter(new OpenFileFilter("csv", "Comma separated values"));
 			int result = chooser.showOpenDialog(MainWindow.sharedInstance.frame);
 			
 			if (result == JFileChooser.APPROVE_OPTION) {
@@ -149,5 +154,14 @@ public class MainWindow {
 			    System.out.println("Selected output file: " + selectedFile.getAbsolutePath());
 			}
 		}
+	}
+	
+	public class ConvertButtonListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			ConverterHandler.getInstance().execute();
+		}
+		
 	}
 }
