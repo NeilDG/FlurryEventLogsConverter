@@ -40,7 +40,7 @@ public class TransactionData {
 	 * Increments an event. Will create a unique event in the table if it does not exist
 	 */
 	public void incrementEvent(String eventName) {
-		if(this.eventTallyTable.containsKey(eventName)) {
+		if(!this.eventTallyTable.containsKey(eventName)) {
 			this.eventTallyTable.put(eventName, 1);
 		}
 		else {
@@ -57,5 +57,16 @@ public class TransactionData {
 			System.out.println("ERROR. " +eventName + " was not found.");
 			return 0;
 		}
+	}
+	
+	public void printDataDebug() {
+		System.out.print("Transaction ID: " +this.uniqueID);
+		
+		for(String eventNames : this.eventTallyTable.keySet()) {
+			System.out.print(" Event: " +eventNames+ " Triggers: " +this.eventTallyTable.get(eventNames).intValue());
+		}
+		
+		System.out.println();
+		
 	}
 }

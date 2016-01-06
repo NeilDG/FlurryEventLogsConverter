@@ -42,6 +42,9 @@ public class EventTallyWorker extends Thread {
 		}
 		
 		TransactionData[] dataList = this.transactionTableHolder.getAllTransactionData();
+		for(int  i = 0; i < dataList.length; i++) {
+			dataList[i].printDataDebug();
+		}
 		System.out.println("Successfully parsed JSON Params. Data loss due to parse errors: " +this.parsingErrors+ " out of " +CSVLinesHolder.getInstance().getLineCount());
 	
 	}
