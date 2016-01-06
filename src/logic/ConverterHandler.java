@@ -3,11 +3,11 @@
  */
 package logic;
 
+import data.EventsTableHolder;
 import notifications.NotificationCenter;
 import notifications.NotificationListener;
 import notifications.Notifications;
 import notifications.Parameters;
-import ui.ProgressBarHandler;
 
 /**
  * Heads the conversion scheme.
@@ -25,8 +25,14 @@ public class ConverterHandler implements NotificationListener {
 	}
 	private ConversionState currentState = ConversionState.NONE;
 	
+	private EventsTableHolder eventsTableHolder;
+	
 	public static void initialize() {
 		sharedInstance = new ConverterHandler();
+	}
+	
+	public static void destroy() {
+		sharedInstance = null;
 	}
 	
 	public static ConverterHandler getInstance() {
@@ -35,6 +41,7 @@ public class ConverterHandler implements NotificationListener {
 	
 	private ConverterHandler() {
 		NotificationCenter.getInstance().addObserver(Notifications.ON_START_EVENT_NAME_GATHERING, this);
+		this.eventsTableHolder = new EventsTableHolder();
 	}
 	
 	/*
@@ -47,6 +54,10 @@ public class ConverterHandler implements NotificationListener {
 	
 	public ConversionState getCurrentState() {
 		return this.currentState;
+	}
+	
+	public EventsTableHolder getEventsTableHolder() {
+		return eventsTableHolder;
 	}
 
 	@Override

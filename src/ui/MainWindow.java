@@ -31,6 +31,9 @@ public class MainWindow {
 	}
 	
 	private JFrame frame;
+	private JLabel lblNameHereInput;
+	private JLabel labelNameHereOutput;
+	
 
 	/**
 	 * Launch the application.
@@ -82,7 +85,7 @@ public class MainWindow {
 		JLabel lblInputFile = new JLabel("Input File:");
 		loadingPanel.add(lblInputFile);
 		
-		JLabel lblNameHereInput = new JLabel("Name here");
+		this.lblNameHereInput = new JLabel("No file selected");
 		loadingPanel.add(lblNameHereInput);
 		
 		JButton btnInputOpen = new JButton("Open...");
@@ -92,7 +95,7 @@ public class MainWindow {
 		JLabel lblOutputFile = new JLabel("Output File:");
 		loadingPanel.add(lblOutputFile);
 		
-		JLabel labelNameHereOutput = new JLabel("Name here");
+		this.labelNameHereOutput = new JLabel("No save destination");
 		loadingPanel.add(labelNameHereOutput);
 		
 		JButton btnOutputOpen = new JButton("Open...");
@@ -137,6 +140,8 @@ public class MainWindow {
 			    File selectedFile = chooser.getSelectedFile();
 			    FilePathHolder.getInstance().setInputFilePath(selectedFile.getAbsolutePath());
 			    System.out.println("Selected input file: " + selectedFile.getAbsolutePath());
+			    
+			    MainWindow.getSharedInstance().lblNameHereInput.setText(selectedFile.getName());
 			}
 		}
 	}
@@ -152,6 +157,8 @@ public class MainWindow {
 			    File selectedFile = chooser.getSelectedFile();
 			    FilePathHolder.getInstance().setOutputFilePath(selectedFile.getAbsolutePath());
 			    System.out.println("Selected output file: " + selectedFile.getAbsolutePath());
+			    
+			    MainWindow.getSharedInstance().labelNameHereOutput.setText(selectedFile.getName());
 			}
 		}
 	}

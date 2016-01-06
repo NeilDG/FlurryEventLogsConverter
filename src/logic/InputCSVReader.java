@@ -40,11 +40,6 @@ public class InputCSVReader extends Thread{
 			
 			CSVReader csvReader = new CSVReader(new FileReader(inputCSVFile));
 			
-			/*String[] nextLine;
-			while((nextLine = csvReader.readNext()) != null) {
-				this.processCSVLine(nextLine);
-			}*/
-			
 			ArrayList<String[]> csvLineList = (ArrayList<String[]>) csvReader.readAll();
 			CSVLinesHolder.getInstance().assignCSVLineList(csvLineList);
 			csvReader.close();
@@ -61,11 +56,6 @@ public class InputCSVReader extends Thread{
 		}
 	}
 	
-	private void processCSVLine(String[] nextLine) {
-		
-		for(int i = 0; i < nextLine.length; i++) {
-			System.out.println("Line " +i+ ": " +nextLine[i]);
-		}
-	}
+
 
 }
