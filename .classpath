@@ -3,5 +3,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/opencsv-3.6.jar"/>
+	<classpathentry kind="lib" path="lib/json_framework.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
