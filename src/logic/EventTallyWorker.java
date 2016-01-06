@@ -7,6 +7,8 @@ import data.CSVIndices;
 import data.CSVLinesHolder;
 import data.TransactionData;
 import data.TransactionTableHolder;
+import notifications.NotificationCenter;
+import notifications.Notifications;
 import ui.ProgressBarHandler;
 import org.json.*;
 
@@ -47,6 +49,7 @@ public class EventTallyWorker extends Thread {
 		}
 		System.out.println("Successfully parsed JSON Params. Data loss due to parse errors: " +this.parsingErrors+ " out of " +CSVLinesHolder.getInstance().getLineCount());
 	
+		NotificationCenter.getInstance().postNotification(Notifications.ON_WRITE_CONVERTED_CSV);
 	}
 	
 	private void readAsJSON(String[] readLine) {

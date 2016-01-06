@@ -151,6 +151,7 @@ public class MainWindow {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			JFileChooser chooser = new JFileChooser();
+			chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 			int result = chooser.showOpenDialog(MainWindow.sharedInstance.frame);
 			
 			if (result == JFileChooser.APPROVE_OPTION) {

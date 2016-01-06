@@ -44,6 +44,8 @@ public class ConverterHandler implements NotificationListener {
 	private ConverterHandler() {
 		NotificationCenter.getInstance().addObserver(Notifications.ON_START_EVENT_NAME_GATHERING, this);
 		NotificationCenter.getInstance().addObserver(Notifications.ON_START_EVENT_TALLYING, this);
+		NotificationCenter.getInstance().addObserver(Notifications.ON_WRITE_CONVERTED_CSV, this);
+		
 		this.eventsTableHolder = new EventsTableHolder();
 		this.transactionTableHolder = new TransactionTableHolder();
 	}
@@ -77,6 +79,11 @@ public class ConverterHandler implements NotificationListener {
 		else if(notificationString == Notifications.ON_START_EVENT_TALLYING) {
 			EventTallyWorker tallyWorker = new EventTallyWorker();
 			tallyWorker.start();
+		}
+		
+		else if(notificationString == Notifications.ON_WRITE_CONVERTED_CSV) {
+			OutputCSVWriter writer = new OutputCSVWriter();
+			writer.start();
 		}
 	}
 	
