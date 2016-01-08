@@ -11,6 +11,8 @@ import com.opencsv.CSVWriter;
 
 import data.TransactionTableHolder;
 import file.FilePathHolder;
+import notifications.NotificationCenter;
+import notifications.Notifications;
 import ui.ProgressBarHandler;
 
 /**
@@ -33,7 +35,7 @@ public class OutputCSVWriter extends Thread {
 		String outputFilePath = FilePathHolder.getInstance().getOutputPath();
 		
 		try {
-			CSVWriter writer = new CSVWriter(new FileWriter(outputFilePath + "/output.csv"));
+			CSVWriter writer = new CSVWriter(new FileWriter(outputFilePath), CSVWriter.DEFAULT_SEPARATOR, CSVWriter.NO_QUOTE_CHARACTER);
 			ArrayList<String[]> entryList = this.transactionHolder.convertToCSVEntry();
 			writer.writeAll(entryList);
 			
@@ -44,5 +46,6 @@ public class OutputCSVWriter extends Thread {
 		}
 		
 		ProgressBarHandler.getInstance().setValue(100, "Finished. Output.csv saved.");
+		NotificationCenter.getInstance().postNotification(Notifications.ON_CONVERT_FINISHED);
 	}
 }

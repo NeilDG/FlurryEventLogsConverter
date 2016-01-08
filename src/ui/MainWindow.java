@@ -21,6 +21,8 @@ import java.awt.FlowLayout;
 import javax.swing.JProgressBar;
 import javax.swing.SwingConstants;
 
+import com.sun.j3d.utils.applet.MainFrame;
+
 import java.awt.Color;
 
 public class MainWindow {
@@ -30,9 +32,7 @@ public class MainWindow {
 		return sharedInstance;
 	}
 	
-	private JFrame frame;
-	private JLabel lblNameHereInput;
-	private JLabel labelNameHereOutput;
+	private Mainframe frame;
 	
 
 	/**
@@ -63,113 +63,9 @@ public class MainWindow {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frame = new JFrame();
-		frame.setResizable(false);
-		frame.setBounds(100, 100, 450, 300);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(new GridLayout(0, 1, 0, 0));
-		
-		JPanel titlePanel = new JPanel();
-		frame.getContentPane().add(titlePanel);
-		titlePanel.setLayout(new GridLayout(0, 1, 0, 0));
-		
-		JLabel lblNewLabel_2 = new JLabel("Flurry Event Logs Converter");
-		lblNewLabel_2.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_2.setFont(new Font("Lucida Grande", Font.BOLD, 15));
-		titlePanel.add(lblNewLabel_2);
-		
-		JPanel loadingPanel = new JPanel();
-		frame.getContentPane().add(loadingPanel);
-		loadingPanel.setLayout(new GridLayout(2, 3, 0, 0));
-		
-		JLabel lblInputFile = new JLabel("Input File:");
-		loadingPanel.add(lblInputFile);
-		
-		this.lblNameHereInput = new JLabel("No file selected");
-		loadingPanel.add(lblNameHereInput);
-		
-		JButton btnInputOpen = new JButton("Open...");
-		btnInputOpen.addActionListener(new InputButtonListener());
-		loadingPanel.add(btnInputOpen);
-		
-		JLabel lblOutputFile = new JLabel("Output File:");
-		loadingPanel.add(lblOutputFile);
-		
-		this.labelNameHereOutput = new JLabel("No save destination");
-		loadingPanel.add(labelNameHereOutput);
-		
-		JButton btnOutputOpen = new JButton("Open...");
-		btnOutputOpen.addActionListener(new OutputButtonListener());
-		loadingPanel.add(btnOutputOpen);
-		
-		JPanel convertPanel = new JPanel();
-		frame.getContentPane().add(convertPanel);
-		convertPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 2, 2));
-		
-		JButton btnConvert = new JButton("Convert");
-		btnConvert.addActionListener(new ConvertButtonListener());
-		convertPanel.add(btnConvert);
-		
-		JPanel panel = new JPanel();
-		frame.getContentPane().add(panel);
-		panel.setLayout(new GridLayout(0, 1, 0, 0));
-		
-		JLabel progressLabel = new JLabel("PROGRESS");
-		progressLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		panel.add(progressLabel);
-		
-		JProgressBar progressBar = new JProgressBar();
-		progressBar.setValue(60);
-		progressBar.setBackground(Color.GRAY);
-		panel.add(progressBar);
-		
-		ProgressBarHandler.initialize(progressBar, progressLabel);
+		frame = new Mainframe();
 		ConverterHandler.initialize();
 	}
 	
-	public class InputButtonListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			JFileChooser chooser = new JFileChooser();
-			chooser.removeChoosableFileFilter(chooser.getFileFilter());
-			chooser.addChoosableFileFilter(new OpenFileFilter("csv", "Comma separated values"));
-			int result = chooser.showOpenDialog(MainWindow.sharedInstance.frame);
-			
-			if (result == JFileChooser.APPROVE_OPTION) {
-			    File selectedFile = chooser.getSelectedFile();
-			    FilePathHolder.getInstance().setInputFilePath(selectedFile.getAbsolutePath());
-			    System.out.println("Selected input file: " + selectedFile.getAbsolutePath());
-			    
-			    MainWindow.getSharedInstance().lblNameHereInput.setText(selectedFile.getName());
-			}
-		}
-	}
 	
-	public class OutputButtonListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			JFileChooser chooser = new JFileChooser();
-			chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-			int result = chooser.showOpenDialog(MainWindow.sharedInstance.frame);
-			
-			if (result == JFileChooser.APPROVE_OPTION) {
-			    File selectedFile = chooser.getSelectedFile();
-			    FilePathHolder.getInstance().setOutputFilePath(selectedFile.getAbsolutePath());
-			    System.out.println("Selected output file: " + selectedFile.getAbsolutePath());
-			    
-			    MainWindow.getSharedInstance().labelNameHereOutput.setText(selectedFile.getName());
-			}
-		}
-	}
-	
-	public class ConvertButtonListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			ConverterHandler.getInstance().execute();
-		}
-		
-	}
 }

@@ -38,7 +38,7 @@ public class EventTallyWorker extends Thread {
 		for(int i = 1; i < CSVLinesHolder.getInstance().getLineCount(); i++) {
 			String[] readLine = CSVLinesHolder.getInstance().getLineAt(i);
 			
-			if(readLine.length > CSVIndices.PARAMS_INDEX) {
+			if(readLine.length > CSVIndices.FlurryIndices.PARAMS_INDEX) {
 				this.readAsJSON(readLine);
 			}
 		}
@@ -56,14 +56,14 @@ public class EventTallyWorker extends Thread {
 		//System.out.println("READING: " +jsonParams);
 		
 		try {
-			JSONObject jsonObject = new JSONObject(readLine[CSVIndices.PARAMS_INDEX]);
+			JSONObject jsonObject = new JSONObject(readLine[CSVIndices.FlurryIndices.PARAMS_INDEX]);
 			
 			String uniqueID = jsonObject.getJSONObject(PLAYLAB_ANALYTICS_KEY).getString(SELECTED_ID_KEY);
 			System.out.println("Read USER ID: " +uniqueID);
 			
 			//tally event
 			TransactionData transactionData = this.transactionTableHolder.retrieveTransaction(uniqueID);
-			transactionData.incrementEvent(readLine[CSVIndices.EVENT_DESCRIPTION]);
+			transactionData.incrementEvent(readLine[CSVIndices.FlurryIndices.EVENT_DESCRIPTION]);
 			
 		}
 		catch(JSONException e) {

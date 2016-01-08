@@ -1,33 +1,25 @@
-/**
- * 
- */
-package logic;
+package logic.AWSLogic;
 
 import data.CSVIndices;
 import data.CSVLinesHolder;
 import data.EventsTableHolder;
+import logic.ConverterHandler;
 import notifications.NotificationCenter;
 import notifications.Notifications;
 import ui.ProgressBarHandler;
 
-/**
- * Worker thread that searches for all events in the CSV and stores it in a hashmap.
- * @author neil.dg
- *
- */
-public class EventNameSearcher extends Thread {
-
+public class AWSEventNameSearcher extends Thread {
 	@Override
 	public void run() {
 		ProgressBarHandler.getInstance().setValue(30, "Listing all defined events");
 		EventsTableHolder eventsTableHolder = ConverterHandler.getInstance().getEventsTableHolder();
 		
-		for(int i = 1; i < CSVLinesHolder.getInstance().getLineCount(); i++) {
+		for(int i = 0; i < CSVLinesHolder.getInstance().getLineCount(); i++) {
 			String[] readLine = CSVLinesHolder.getInstance().getLineAt(i);
 			
 			//this.debugPrintLine(readLine);
-			if(readLine.length > CSVIndices.FlurryIndices.EVENT_DESCRIPTION) {
-				eventsTableHolder.addEvent(readLine[CSVIndices.FlurryIndices.EVENT_DESCRIPTION]);
+			if(readLine.length > CSVIndices.AWSIndices.EVENT_DESCRIPTION) {
+				eventsTableHolder.addEvent(readLine[CSVIndices.AWSIndices.EVENT_DESCRIPTION]);
 			}
 			
 		}

@@ -3,8 +3,12 @@
  */
 package logic;
 
+import config.ConverterConfig;
+import config.ConverterConfig.OriginType;
 import data.EventsTableHolder;
 import data.TransactionTableHolder;
+import logic.AWSLogic.AWSEventNameSearcher;
+import logic.AWSLogic.AWSEventTallyWorker;
 import notifications.NotificationCenter;
 import notifications.NotificationListener;
 import notifications.Notifications;
@@ -45,6 +49,7 @@ public class ConverterHandler implements NotificationListener {
 		NotificationCenter.getInstance().addObserver(Notifications.ON_START_EVENT_NAME_GATHERING, this);
 		NotificationCenter.getInstance().addObserver(Notifications.ON_START_EVENT_TALLYING, this);
 		NotificationCenter.getInstance().addObserver(Notifications.ON_WRITE_CONVERTED_CSV, this);
+		NotificationCenter.getInstance().addObserver(Notifications.ON_CONVERT_FINISHED, this);
 		
 		this.eventsTableHolder = new EventsTableHolder();
 		this.transactionTableHolder = new TransactionTableHolder();
@@ -73,18 +78,49 @@ public class ConverterHandler implements NotificationListener {
 	@Override
 	public void onNotify(String notificationString, Parameters params) {
 		if(notificationString == Notifications.ON_START_EVENT_NAME_GATHERING) {
-			EventNameSearcher eventNameSearcher = new EventNameSearcher();
-			eventNameSearcher.start();
+			
+			if(ConverterConfig.getOriginType() == OriginType.FROM_FLURRY) {
+				EventNameSearcher eventNameSearcher = new EventNameSearcher();
+				eventNameSearcher.start();
+			}
+			else {
+				System.out.print("Using AWS configuration");
+				AWSEventNameSearcher searcher = new AWSEventNameSearcher();
+				searcher.start();
+			}
 		}
 		else if(notificationString == Notifications.ON_START_EVENT_TALLYING) {
-			EventTallyWorker tallyWorker = new EventTallyWorker();
-			tallyWorker.start();
+			if(ConverterConfig.getOriginType() == OriginType.FROM_FLURRY) {
+				EventTallyWorker tallyWorker = new EventTallyWorker();
+				tallyWorker.start();
+			}
+			else {
+				System.out.print("Using AWS configuration");
+				AWSEventTallyWorker worker = new AWSEventTallyWorker();
+				worker.start();
+			}
+			
 		}
 		
 		else if(notificationString == Notifications.ON_WRITE_CONVERTED_CSV) {
 			OutputCSVWriter writer = new OutputCSVWriter();
 			writer.start();
 		}
+		else if(notificationString == Notifications.ON_CONVERT_FINISHED) {
+			this.performCleanup();
+		}
+	}
+	
+	private void performCleanup() {
+		NotificationCenter.getInstance().clearObservers();
+		
+		this.eventsTableHolder = null;
+		this.transactionTableHolder = null;
+		
+		destroy();
+		initialize();
+		
+		System.out.println("Conversion finished. Successfully performed cleanup.");
 	}
 	
 	
