@@ -11,6 +11,7 @@ import com.opencsv.CSVWriter;
 
 import data.TransactionTableHolder;
 import file.FilePathHolder;
+import filters.FilterManager;
 import notifications.NotificationCenter;
 import notifications.Notifications;
 import ui.ProgressBarHandler;
@@ -31,6 +32,10 @@ public class OutputCSVWriter extends Thread {
 	}
 	@Override
 	public void run() {
+		ProgressBarHandler.getInstance().setValue(70, "Applying filters");
+		FilterManager filterManager = ConverterHandler.getInstance().getFilterManager();
+		filterManager.runFilters();
+		
 		ProgressBarHandler.getInstance().setValue(80, "Writing transaction database");
 		String outputFilePath = FilePathHolder.getInstance().getOutputPath();
 		

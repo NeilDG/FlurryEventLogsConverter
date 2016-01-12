@@ -4,6 +4,8 @@ import data.CSVIndices;
 import data.CSVLinesHolder;
 import data.TransactionData;
 import data.TransactionTableHolder;
+import filters.FilterManager;
+import filters.MeanTruncateFilter;
 import logic.ConverterHandler;
 import notifications.NotificationCenter;
 import notifications.Notifications;
@@ -36,6 +38,10 @@ public class AWSEventTallyWorker extends Thread {
 		for(int  i = 0; i < dataList.length; i++) {
 			dataList[i].printDataDebug();
 		}
+		
+		//TODO: move this filter application in GUI form
+		FilterManager filterManager = ConverterHandler.getInstance().getFilterManager();
+		filterManager.addFilter(new MeanTruncateFilter());
 		
 		NotificationCenter.getInstance().postNotification(Notifications.ON_WRITE_CONVERTED_CSV);
 	}

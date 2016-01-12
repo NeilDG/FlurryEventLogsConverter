@@ -47,6 +47,9 @@ public class TransactionData {
 			int value = this.eventTallyTable.get(eventName).intValue() + 1;
 			this.eventTallyTable.put(eventName, value);
 		}
+		
+		EventsTableHolder eventsTableHolder = ConverterHandler.getInstance().getEventsTableHolder();
+		eventsTableHolder.tallyCorrespondingEvent(eventName);
 	}
 	
 	public int getEventCount(String eventName) {

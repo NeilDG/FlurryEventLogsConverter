@@ -48,7 +48,7 @@ public class TransactionTableHolder {
 		
 		
 		eventsTableHolder = ConverterHandler.getInstance().getEventsTableHolder();
-		String[] eventNames = eventsTableHolder.getAllEventNames();
+		String[] eventNames = eventsTableHolder.getVisibleEventNames();
 		
 		String[] csvLine = new String[eventNames.length + 1];
 		
@@ -72,7 +72,7 @@ public class TransactionTableHolder {
 	}
 	
 	private String[] writeDataList(TransactionData data) {
-		String[] eventNames = this.eventsTableHolder.getAllEventNames();
+		String[] eventNames = this.eventsTableHolder.getVisibleEventNames();
 		String[] csvLines = new String[eventNames.length + 1];
 		
 		csvLines[0] = data.getUniqueID();

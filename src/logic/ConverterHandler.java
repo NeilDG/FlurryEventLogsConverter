@@ -3,10 +3,13 @@
  */
 package logic;
 
+import com.sun.net.httpserver.Filter;
+
 import config.ConverterConfig;
 import config.ConverterConfig.OriginType;
 import data.EventsTableHolder;
 import data.TransactionTableHolder;
+import filters.FilterManager;
 import logic.AWSLogic.AWSEventNameSearcher;
 import logic.AWSLogic.AWSEventTallyWorker;
 import notifications.NotificationCenter;
@@ -32,6 +35,7 @@ public class ConverterHandler implements NotificationListener {
 	
 	private EventsTableHolder eventsTableHolder;
 	private TransactionTableHolder transactionTableHolder;
+	private FilterManager filterManager;
 	
 	public static void initialize() {
 		sharedInstance = new ConverterHandler();
@@ -53,6 +57,7 @@ public class ConverterHandler implements NotificationListener {
 		
 		this.eventsTableHolder = new EventsTableHolder();
 		this.transactionTableHolder = new TransactionTableHolder();
+		this.filterManager = new FilterManager();
 	}
 	
 	/*
@@ -73,6 +78,10 @@ public class ConverterHandler implements NotificationListener {
 	
 	public TransactionTableHolder getTransactionTableHolder() {
 		return transactionTableHolder;
+	}
+	
+	public FilterManager getFilterManager() {
+		return this.filterManager;
 	}
 
 	@Override

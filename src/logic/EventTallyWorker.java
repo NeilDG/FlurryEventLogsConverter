@@ -7,6 +7,8 @@ import data.CSVIndices;
 import data.CSVLinesHolder;
 import data.TransactionData;
 import data.TransactionTableHolder;
+import filters.FilterManager;
+import filters.MeanTruncateFilter;
 import notifications.NotificationCenter;
 import notifications.Notifications;
 import ui.ProgressBarHandler;
@@ -49,6 +51,10 @@ public class EventTallyWorker extends Thread {
 		}
 		System.out.println("Successfully parsed JSON Params. Data loss due to parse errors: " +this.parsingErrors+ " out of " +CSVLinesHolder.getInstance().getLineCount());
 	
+		//TODO: move this filter application in GUI form
+		FilterManager filterManager = ConverterHandler.getInstance().getFilterManager();
+		filterManager.addFilter(new MeanTruncateFilter());
+		
 		NotificationCenter.getInstance().postNotification(Notifications.ON_WRITE_CONVERTED_CSV);
 	}
 	
